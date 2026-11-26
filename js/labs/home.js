@@ -22,13 +22,6 @@ A.reg({
       <div>${svg}</div>
     </section>
     <div class="cards">${labs.map(l => `<a class="card" href="#${l.id}"><span class="n">${l.no}</span><div><b>${A.esc(l.title)}</b><span>${A.esc(l.short)}</span></div></a>`).join('')}</div>
-    <h2 style="margin-top:30px;font-size:22px">เทียบกับแผนการสอน</h2>
-    <div class="duo">
-      <div><h3 style="margin:6px 0">2015326 ดาราศาสตร์</h3><table class="weeks"><tr><th>สัปดาห์</th><th>ปฏิบัติการ</th></tr>
-      ${[[9, 1], [10, 2], [11, 3], [12, 4], [13, 5], [14, 6], [16, 7]].map(([w, n]) => `<tr><td>${w}</td><td><a href="#${labs[n - 1].id}">${n}. ${A.esc(labs[n - 1].title)}</a></td></tr>`).join('')}</table></div>
-      <div><h3 style="margin:6px 0">2015231 ดาราศาสตร์และอวกาศสำหรับครูวิทยาศาสตร์</h3><table class="weeks"><tr><th>สัปดาห์</th><th>ปฏิบัติการ</th></tr>
-      ${[[2, 1], [3, 2], ['4–5', 3], [6, 4], [7, 5], [9, 7], [10, 8], [11, 6], [12, 9], [13, 10], [14, 11]].map(([w, n]) => `<tr><td>${w}</td><td><a href="#${labs[n - 1].id}">${n}. ${A.esc(labs[n - 1].title)}</a></td></tr>`).join('')}</table></div>
-    </div>
     <p class="note" style="margin-top:18px">เนื้อหาทฤษฎีอ้างอิง OpenStax <i>Astronomy 2e</i> (เอกสารประกอบรายวิชา) และแนวปฏิบัติการของ Nebraska Astronomy Applet Project (astro.unl.edu)</p>`;
   }
 });

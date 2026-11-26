@@ -162,7 +162,7 @@ A.g = {
 function cleanup() { A._loops.forEach(l => l.stop()); A._obs.forEach(o => o.disconnect()); A._loops = []; A._obs = []; }
 function renderNav(id) {
   const nav = $('#nav'); nav.innerHTML = '';
-  nav.append(A.el('a', { href: '#home', class: id === 'home' ? 'on' : '' }, [A.el('span', { class: 'n', text: '★' }), A.el('span', { class: 't', text: 'หน้าแรก / แผนการเรียน' })]));
+  nav.append(A.el('a', { href: '#home', class: id === 'home' ? 'on' : '' }, [A.el('span', { class: 'n', text: '★' }), A.el('span', { class: 't', text: 'หน้าแรก' })]));
   nav.append(A.el('div', { class: 'grp', text: 'ปฏิบัติการ' }));
   A.labs.filter(l => l.no).forEach(l => nav.append(A.el('a', { href: '#' + l.id, class: l.id === id ? 'on' : '' }, [A.el('span', { class: 'n', text: l.no }), A.el('span', { class: 't', text: l.title })])));
   nav.append(A.el('div', { class: 'grp', text: 'ส่งงาน' }));
