@@ -15,6 +15,7 @@ A.el = (tag, attrs = {}, kids = []) => {
   return e;
 };
 A.reg = lab => A.labs.push(lab);
+A.fontsReady = (document.fonts && document.fonts.load) ? Promise.all(['400 14px Sarabun', '500 14px Sarabun', '600 14px Sarabun', '700 14px Sarabun'].map(f => document.fonts.load(f, 'กขค'))).catch(() => {}) : Promise.resolve();
 A.fmt = (v, d = 2) => (isFinite(v) ? Number(v).toLocaleString('th-TH', {minimumFractionDigits: d, maximumFractionDigits: d}) : '–');
 A.toast = msg => { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(A._tt); A._tt = setTimeout(() => t.classList.remove('on'), 1800); };
 
@@ -54,6 +55,7 @@ A.canvas = (parent, opts, draw) => {
   };
   c.redraw = () => { if (c.W) { ctx.save(); ctx.clearRect(0, 0, c.W, c.H); c.draw && c.draw(ctx, c.W, c.H); ctx.restore(); } };
   A.observe(fig, c.resize);
+  A.fontsReady.then(() => c.redraw());
   return c;
 };
 /* pointer drag in CSS px */
@@ -132,7 +134,7 @@ A.ui = {
 A.g = {
   circle(ctx, x, y, r, fill, stroke, lw = 1) { ctx.beginPath(); ctx.arc(x, y, Math.max(0, r), 0, 7); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } },
   line(ctx, x1, y1, x2, y2, c, lw = 1, dash) { ctx.beginPath(); ctx.setLineDash(dash || []); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.strokeStyle = c; ctx.lineWidth = lw; ctx.stroke(); ctx.setLineDash([]); },
-  text(ctx, t, x, y, o = {}) { ctx.font = `${o.w || 500} ${o.s || 13}px ${o.f || '"IBM Plex Sans Thai",sans-serif'}`; ctx.fillStyle = o.c || '#e9edf8'; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.b || 'alphabetic'; if (o.bg) { const w = ctx.measureText(t).width; const ox = o.a === 'center' ? -w / 2 : o.a === 'right' ? -w : 0; ctx.save(); ctx.fillStyle = o.bg; ctx.fillRect(x + ox - 4, y - (o.s || 13) + 1, w + 8, (o.s || 13) + 6); ctx.restore(); ctx.fillStyle = o.c || '#e9edf8'; } ctx.fillText(t, x, y); },
+  text(ctx, t, x, y, o = {}) { ctx.font = `${o.w || 500} ${(o.s || 13) + 1.5}px ${o.f || '"Sarabun",sans-serif'}`; ctx.fillStyle = o.c || '#e9edf8'; ctx.textAlign = o.a || 'left'; ctx.textBaseline = o.b || 'alphabetic'; if (o.bg) { const w = ctx.measureText(t).width; const ox = o.a === 'center' ? -w / 2 : o.a === 'right' ? -w : 0; ctx.save(); ctx.fillStyle = o.bg; ctx.fillRect(x + ox - 4, y - (o.s || 13) + 1, w + 8, (o.s || 13) + 6); ctx.restore(); ctx.fillStyle = o.c || '#e9edf8'; } ctx.fillText(t, x, y); },
   arrow(ctx, x1, y1, x2, y2, c, lw = 1.5, hs = 8) { A.g.line(ctx, x1, y1, x2, y2, c, lw); const a = Math.atan2(y2 - y1, x2 - x1); ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - hs * Math.cos(a - .4), y2 - hs * Math.sin(a - .4)); ctx.lineTo(x2 - hs * Math.cos(a + .4), y2 - hs * Math.sin(a + .4)); ctx.closePath(); ctx.fillStyle = c; ctx.fill(); },
   stars(ctx, W, H, n = 140, seed = 7) { let s = seed; const r = () => (s = (s * 16807) % 2147483647) / 2147483647; for (let i = 0; i < n; i++) { ctx.fillStyle = `rgba(220,230,255,${0.15 + r() * 0.5})`; ctx.fillRect(r() * W, r() * H, r() < .9 ? 1 : 1.6, r() < .9 ? 1 : 1.6); } },
   sun(ctx, x, y, r) { const g = ctx.createRadialGradient(x, y, r * .2, x, y, r * 2.2); g.addColorStop(0, 'rgba(255,215,90,.55)'); g.addColorStop(1, 'rgba(255,200,60,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 2.2, 0, 7); ctx.fill(); A.g.circle(ctx, x, y, r, '#ffcc4d'); },
@@ -257,7 +259,7 @@ function renderWork(pane, lab) {
 function reportHTML(ids) {
   const st = S.student;
   let h = `<!DOCTYPE html><html lang="th"><head><meta charset="utf-8"><title>รายงานผลการทดลองดาราศาสตร์ - ${A.esc(st.name || '')}</title>
-<style>body{font:15px/1.6 "TH Sarabun New","Sarabun","Tahoma",sans-serif;max-width:820px;margin:30px auto;padding:0 20px;color:#111}h1{font-size:24px;margin:0}h2{font-size:19px;border-bottom:2px solid #333;padding-bottom:4px;margin-top:36px;page-break-before:always}h2:first-of-type{page-break-before:auto}.q{margin:12px 0}.q b{display:block}.a{white-space:pre-wrap;border-left:3px solid #999;padding:4px 10px;background:#f6f6f6;min-height:1.5em}table{border-collapse:collapse;margin:6px 0}td,th{border:1px solid #888;padding:3px 8px}img{max-width:100%;margin:8px 0;border:1px solid #ccc}.meta td{border:0;padding:2px 12px 2px 0}</style></head><body>`;
+<style>body{font:16px/1.7 "Sarabun","TH Sarabun New","Tahoma",sans-serif;max-width:820px;margin:30px auto;padding:0 20px;color:#111}h1{font-size:24px;margin:0}h2{font-size:19px;border-bottom:2px solid #333;padding-bottom:4px;margin-top:36px;page-break-before:always}h2:first-of-type{page-break-before:auto}.q{margin:12px 0}.q b{display:block}.a{white-space:pre-wrap;border-left:3px solid #999;padding:4px 10px;background:#f6f6f6;min-height:1.5em}table{border-collapse:collapse;margin:6px 0}td,th{border:1px solid #888;padding:3px 8px}img{max-width:100%;margin:8px 0;border:1px solid #ccc}.meta td{border:0;padding:2px 12px 2px 0}</style></head><body>`;
   h += `<h1>รายงานผลการทดลองดาราศาสตร์</h1><table class="meta"><tr><td>ชื่อ–สกุล</td><td>${A.esc(st.name)}</td></tr><tr><td>รหัสนักศึกษา</td><td>${A.esc(st.id)}</td></tr><tr><td>รายวิชา / กลุ่มเรียน</td><td>${A.esc(st.course)} ${A.esc(st.sec)}</td></tr><tr><td>วันที่</td><td>${new Date().toLocaleDateString('th-TH', { dateStyle: 'long' })}</td></tr></table>`;
   ids.forEach(id => {
     const lab = A.labs.find(l => l.id === id); const ans = S.ans[id] || {};

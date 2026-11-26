@@ -35,7 +35,7 @@ A.reg({
     let ax, box;
     const Tmin = Math.log10(2300), Tmax = Math.log10(40000), Lmin = -5, Lmax = 6.2;
     function draw(ctx, W, H) {
-      box = { x: 70, y: 46, w: W - 96, h: H - 100 };
+      box = { x: 70, y: 46, w: W - 96, h: H - 116 };
       // spectral class band
       ax = A.g.axes(ctx, box, { x0: Tmin, x1: Tmax, y0: Lmin, y1: Lmax, revx: true, xt: [3000, 5000, 7000, 10000, 20000, 30000].map(Math.log10), yt: [-4, -2, 0, 2, 4, 6], xf: v => Math.round(10 ** v).toLocaleString(), yf: v => '10' + ({ '-4': '⁻⁴', '-2': '⁻²', 0: '⁰', 2: '²', 4: '⁴', 6: '⁶' })[v], xl: 'อุณหภูมิผิว (K) — ร้อนอยู่ทางซ้าย', yl: 'กำลังส่องสว่าง (L☉)', ylo: 52 });
       SPEC.forEach(([T, s], i) => { const hi = i ? SPEC[i - 1][0] : 50000; const x1 = ax.X(Math.min(Tmax, Math.log10(hi))), x2 = ax.X(Math.max(Tmin, Math.log10(T))); A.g.text(ctx, s, (x1 + x2) / 2, box.y - 8, { a: 'center', s: 13, w: 700, c: tCol((T + Math.min(hi, 40000)) / 2) }); });

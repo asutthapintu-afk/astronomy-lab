@@ -9,7 +9,7 @@ A.reg({
     let s = 11; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
     for (let i = 0; i < 160; i++) svg += `<circle cx="${(r() * 490).toFixed(1)}" cy="${(r() * 340).toFixed(1)}" r="${(r() * 0.9 + 0.3).toFixed(2)}" fill="#dfe7ff" opacity="${(0.2 + r() * 0.5).toFixed(2)}"/>`;
     seg.forEach(([a, b]) => svg += `<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}" stroke="#7dd3fc" stroke-opacity=".35" stroke-width="1.2"/>`);
-    labs.forEach((l, i) => { const [x, y] = P[i]; svg += `<a href="#${l.id}"><title>${A.esc(l.title)}</title><circle cx="${x}" cy="${y}" r="15" fill="#7dd3fc" opacity=".12"/><circle cx="${x}" cy="${y}" r="9" fill="#e9edf8"/><text x="${x}" y="${y + 4}" text-anchor="middle" font-family="Chakra Petch" font-weight="700" font-size="11" fill="#0a1022">${l.no}</text></a>`; });
+    labs.forEach((l, i) => { const [x, y] = P[i]; svg += `<a href="#${l.id}"><title>${A.esc(l.title)}</title><circle cx="${x}" cy="${y}" r="15" fill="#7dd3fc" opacity=".12"/><circle cx="${x}" cy="${y}" r="9" fill="#e9edf8"/><text x="${x}" y="${y + 4}" text-anchor="middle" font-family="Sarabun" font-weight="700" font-size="11" fill="#0a1022">${l.no}</text></a>`; });
     svg += '</svg>';
     main.innerHTML = `
     <section class="home-hero">
