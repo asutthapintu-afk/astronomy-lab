@@ -94,8 +94,7 @@ A.reg({
       // axis tilt points toward ecliptic longitude 90° (toward +y on screen = down) -> screen offset
       const nx = Math.sin(23.44 * D) * 22, ny = -Math.cos(23.44 * D) * 22;
       // lit half faces the Sun
-      A.g.circle(ctx, p[0], p[1], 9, '#0d1a3a', '#7dd3fc');
-      const sa = Math.atan2(cy - p[1], cx - p[0]); ctx.beginPath(); ctx.arc(p[0], p[1], 9, sa - Math.PI / 2, sa + Math.PI / 2); ctx.closePath(); ctx.fillStyle = '#2a5aa8'; ctx.fill();
+      PLANET.draw(ctx, p[0], p[1], 11, 'earth', { sun: Math.atan2(cy - p[1], cx - p[0]) });
       A.g.line(ctx, p[0] - nx, p[1] - ny, p[0] + nx, p[1] + ny, '#e9edf8', 1.6); A.g.text(ctx, 'N', p[0] + nx + 3, p[1] + ny, { s: 11, w: 700 });
       A.g.text(ctx, 'แกนโลกชี้ทิศเดิมเสมอ (ไปทางดาวเหนือ)', 12, H - 12, { s: 11.5, c: '#9aa7c7' });
     }

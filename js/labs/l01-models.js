@@ -55,15 +55,15 @@ A.reg({
       if (st.model === 'helio') {
         const sc = Math.min(W, H) * 0.44 / Math.max(g.a, 1);
         A.g.circle(ctx, cx, cy, sc, null, 'rgba(125,211,252,.35)'); A.g.circle(ctx, cx, cy, g.a * sc, null, 'rgba(255,255,255,.25)');
-        A.g.sun(ctx, cx, cy, 9);
+        A.g.sun(ctx, cx, cy, Math.min(9, sc * 0.3));
         const ex = cx + g.E[0] * sc, ey = cy - g.E[1] * sc, px = cx + g.P[0] * sc, py = cy - g.P[1] * sc;
         const L = Math.max(W, H); const ux = (px - ex), uy = (py - ey), n = Math.hypot(ux, uy);
         A.g.line(ctx, ex, ey, ex + ux / n * L, ey + uy / n * L, 'rgba(255,240,180,.55)', 1.2, [6, 5]);
-        A.g.circle(ctx, ex, ey, 6, '#5aa9ff'); A.g.text(ctx, 'โลก', ex + 9, ey - 8, { s: 12.5 });
-        A.g.circle(ctx, px, py, 5.5, PL[st.pl][2]); A.g.text(ctx, PL[st.pl][0], px + 9, py - 8, { s: 12.5 });
+        PLANET.draw(ctx, ex, ey, Math.min(8, sc * 0.28), 'earth', { sun: Math.atan2(cy - ey, cx - ex) }); A.g.text(ctx, 'โลก', ex + 11, ey - 10, { s: 12.5 });
+        PLANET.draw(ctx, px, py, g.a > 3 ? 9 : 7, st.pl, { sun: Math.atan2(cy - py, cx - px), tilt: 0.4 }); A.g.text(ctx, PL[st.pl][0], px + 12, py - 10, { s: 12.5 });
       } else {
         const sc = Math.min(W, H) * 0.42 / (g.a < 1 ? 2.3 : g.a + 1);
-        A.g.circle(ctx, cx, cy, 7, '#5aa9ff'); A.g.text(ctx, 'โลก (นิ่ง)', cx + 9, cy + 18, { s: 12.5 });
+        PLANET.draw(ctx, cx, cy, 9, 'earth', { sun: Math.atan2(-g.s[1], g.s[0]) }); A.g.text(ctx, 'โลก (นิ่ง)', cx + 11, cy + 20, { s: 12.5 });
         const sd = g.a < 1 ? 2.2 : 1;
         const sx = cx + g.s[0] * sd * sc, sy = cy - g.s[1] * sd * sc;
         A.g.circle(ctx, cx, cy, sd * sc, null, 'rgba(255,204,77,.35)'); A.g.sun(ctx, sx, sy, 8);
@@ -74,7 +74,7 @@ A.reg({
         A.g.circle(ctx, cx + C[0] * sc, cy - C[1] * sc, 2.5, '#a5b4fc');
         const px = cx + pos[0] * sc, py = cy - pos[1] * sc;
         A.g.line(ctx, cx, cy, cx + (px - cx) * 5, cy + (py - cy) * 5, 'rgba(255,240,180,.55)', 1.2, [6, 5]);
-        A.g.circle(ctx, px, py, 5.5, PL[st.pl][2]); A.g.text(ctx, PL[st.pl][0], px + 9, py - 8, { s: 12.5 });
+        PLANET.draw(ctx, px, py, g.a > 3 ? 9 : 7, st.pl, { sun: Math.atan2(sy - py, sx - px), tilt: 0.4 }); A.g.text(ctx, PL[st.pl][0], px + 12, py - 10, { s: 12.5 });
         A.g.text(ctx, 'วงรอบใหญ่ (deferent) · วงรอบเล็ก (epicycle)', 12, H - 12, { s: 12, c: '#a5b4fc' });
       }
     }
@@ -84,7 +84,7 @@ A.reg({
       const r = Math.max(5, Math.min(W, H) * 0.34 * dmin / g.dist);
       const k = (1 + Math.cos(g.alpha)) / 2;
       const litRight = g.elong < 0; // planet west of Sun -> Sun to its east (left on sky, looking south) -> lit side left. sky E is left
-      A.g.phase(ctx, cx, cy, r, k, !litRight, '#202842', PL[st.pl][2]);
+      A.g.stars(ctx, W, H, 50, 9); const rr = st.pl === 'saturn' ? r * 0.55 : r; PLANET.draw(ctx, cx, cy, rr, st.pl, { phase: { k, litRight: !litRight }, tilt: 0.38 });
       A.g.text(ctx, `สว่าง ${Math.round(k * 100)}% · ขนาดปรากฏสัมพัทธ์ ×${(1 / g.dist).toFixed(2)}`, W / 2, H - 38, { a: 'center', s: 13.5, w: 600 });
       A.g.text(ctx, `มุมห่างจากดวงอาทิตย์ ${Math.abs(g.elong).toFixed(0)}° ทาง${g.elong > 0 ? 'ตะวันออก (เห็นหัวค่ำ)' : 'ตะวันตก (เห็นเช้ามืด)'}`, W / 2, H - 16, { a: 'center', s: 12.5, c: '#9aa7c7' });
     }

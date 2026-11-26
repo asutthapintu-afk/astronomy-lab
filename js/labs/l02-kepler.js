@@ -25,7 +25,8 @@ A.reg({
     { q: 'ถ้าดาวเคราะห์น้อยดวงหนึ่งมีคาบ 8 ปี กึ่งแกนเอกของมันเป็นเท่าใด แสดงวิธีคิด แล้วตรวจคำตอบด้วยตัวจำลอง' }
   ],
   mount(stage, ctrls) {
-    const st = { a: 1.524, e: 0.093, M: 0, run: true, speed: 0.15, foci: true, sweep: true, vec: true };
+    const KIND = { earth: 'earth', mercury: 'mercury', mars: 'mars', jupiter: 'jupiter', pluto: 'pluto', halley: 'comet' };
+    const st = { kind: 'mars', a: 1.524, e: 0.093, M: 0, run: true, speed: 0.15, foci: true, sweep: true, vec: true };
     const orb = A.canvas(stage, { ratio: 0.6, min: 300, max: 520, cap: 'วงโคจร (ดวงอาทิตย์อยู่ที่โฟกัส F₁)' }, draw);
     const g3 = A.canvas(stage, { ratio: 0.3, min: 220, max: 280, cap: 'กฎข้อ 3: P² เทียบกับ a³ (สเกลลอการิทึม)' }, draw3);
     const P = () => Math.pow(st.a, 1.5);
@@ -61,7 +62,7 @@ A.reg({
         const Lv = 70 * v / vmax;
         A.g.arrow(ctx, X(p.x), Y(p.y), X(p.x) + vx / n * Lv, Y(p.y) - vy / n * Lv, '#6ee7b7', 2);
       }
-      A.g.circle(ctx, X(p.x), Y(p.y), 6, '#7dd3fc');
+      PLANET.draw(ctx, X(p.x), Y(p.y), st.kind === 'jupiter' ? 11 : st.kind === 'comet' ? 4 : 8, st.kind, { sun: Math.atan2(Y(0) - Y(p.y), X(0) - X(p.x)) });
     }
     function draw3(ctx, W, H) {
       const box = { x: 58, y: 34, w: W - 80, h: H - 78 };
@@ -73,7 +74,7 @@ A.reg({
       A.g.text(ctx, 'เส้น P² = a³', ax.X(4.6), ax.Y(5.4), { s: 12, c: '#ffcc4d', a: 'right' });
     }
     A.ui.h(ctrls, 'วงโคจร');
-    const pre = A.ui.select(ctrls, { label: 'วัตถุตัวอย่าง', value: 'mars', options: Object.entries(PRE).map(([k, v]) => [k, v[0]]) }, k => { if (k !== 'custom') { ra.set(PRE[k][1]); re.set(PRE[k][2]); st.a = PRE[k][1]; st.e = PRE[k][2]; } all(); });
+    const pre = A.ui.select(ctrls, { label: 'วัตถุตัวอย่าง', value: 'mars', options: Object.entries(PRE).map(([k, v]) => [k, v[0]]) }, k => { if (KIND[k]) st.kind = KIND[k]; if (k !== 'custom') { ra.set(PRE[k][1]); re.set(PRE[k][2]); st.a = PRE[k][1]; st.e = PRE[k][2]; } all(); });
     const ra = A.ui.range(ctrls, { label: 'กึ่งแกนเอก a', min: 0.2, max: 50, step: 0.001, value: st.a, unit: 'AU', fmt: v => v.toFixed(3) }, v => { st.a = v; pre.set('custom'); all(); });
     const re = A.ui.range(ctrls, { label: 'ความรี e', min: 0, max: 0.97, step: 0.001, value: st.e, fmt: v => v.toFixed(3) }, v => { st.e = v; pre.set('custom'); all(); });
     A.ui.check(ctrls, { label: 'เส้นจากจุดโฟกัสทั้งสอง (กฎข้อ 1)', value: true }, v => { st.foci = v; all(); });

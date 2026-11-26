@@ -60,8 +60,7 @@ A.reg({
       A.g.circle(ctx, ox + Math.cos(oa) * 18, oy - Math.sin(oa) * 18, 3.5, '#e9edf8');
       // moon (lit half toward the right = sun)
       const mx = g.cx + g.R * Math.cos(st.E * AS.D), my = g.cy - g.R * Math.sin(st.E * AS.D), mr = Math.max(9, g.re * 0.45);
-      A.g.circle(ctx, mx, my, mr, '#2a2f40');
-      ctx.beginPath(); ctx.arc(mx, my, mr, -Math.PI / 2, Math.PI / 2); ctx.closePath(); ctx.fillStyle = '#e9e4d4'; ctx.fill();
+      PLANET.draw(ctx, mx, my, mr, 'moon', { sun: 0 });
       A.g.line(ctx, g.cx, g.cy, mx, my, 'rgba(125,211,252,.35)', 1, [3, 4]);
       A.g.text(ctx, 'ทิศการโคจรและหมุน: ทวนเข็มนาฬิกา', 12, H - 12, { s: 11.5, c: '#9aa7c7' });
     }
@@ -69,7 +68,7 @@ A.reg({
       const k = (1 - Math.cos(st.E * AS.D)) / 2, waxing = st.E < 180;
       ctx.fillStyle = '#060b1a'; ctx.fillRect(0, 0, W, H); A.g.stars(ctx, W, H, 40, 3);
       const r = Math.min(W, H) * 0.32;
-      A.g.phase(ctx, W / 2, H / 2 + 6, r, k, waxing, '#262c3d', '#ece6d2');
+      PLANET.draw(ctx, W / 2, H / 2 + 6, r, 'moon', { phase: { k, litRight: waxing, alpha: 0.93 } });
       A.g.text(ctx, phaseName(st.E), W / 2, H - 10, { a: 'center', s: 14, w: 600 });
     }
     function drawHz(ctx, W, H) {
@@ -83,7 +82,7 @@ A.reg({
       const body = (ang, draw) => { let d = AS.norm(ang - oa + 180) - 180; /* d>0 => east of zenith */ if (Math.abs(d) > 90) return false; const x = W / 2 - d / 90 * (W / 2 - 24), y = gy - (90 - Math.abs(d)) / 90 * (gy - 26); draw(x, y); return true; };
       const sunUp = body(0, (x, y) => A.g.sun(ctx, x, y, 11));
       const k = (1 - Math.cos(st.E * AS.D)) / 2;
-      const moonUp = body(st.E, (x, y) => A.g.phase(ctx, x, y, 12, k, st.E < 180, day ? '#6d8fc7' : '#262c3d', '#ece6d2'));
+      const moonUp = body(st.E, (x, y) => PLANET.draw(ctx, x, y, 13, 'moon', { phase: { k, litRight: st.E < 180, alpha: day ? 0.55 : 0.9 } }));
       A.g.text(ctx, `${sunUp ? 'ดวงอาทิตย์อยู่บนฟ้า' : 'ดวงอาทิตย์ตกแล้ว'} · ${moonUp ? 'เห็นดวงจันทร์' : 'ดวงจันทร์อยู่ใต้ขอบฟ้า'}`, W / 2, 44, { a: 'center', s: 12.5, w: 600, c: '#fff' });
     }
     A.ui.h(ctrls, 'ตำแหน่งดวงจันทร์');

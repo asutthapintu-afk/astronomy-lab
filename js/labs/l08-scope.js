@@ -64,20 +64,12 @@ A.reg({
     function scene(c, R, px) {   // px = pixels per arcsec on screen
       const g = A.g;
       if (st.tgt === 'moon') {
-        const r = 932 * px; let s = 5; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
-        g.circle(c, 0, 0, r, '#d9d4c5');
-        for (let i = 0; i < 9; i++) { const a = rnd() * 6.28, d = rnd() * 0.6 * r; c.globalAlpha = 0.35; g.circle(c, Math.cos(a) * d, Math.sin(a) * d, r * (0.12 + rnd() * 0.18), '#8e8a80'); }
-        c.globalAlpha = 1;
-        for (let i = 0; i < 260; i++) { const a = rnd() * 6.28, d = Math.sqrt(rnd()) * 0.97 * r, cr = (1 + rnd() * rnd() * 40) * px; if (cr < 0.4) continue; g.circle(c, Math.cos(a) * d, Math.sin(a) * d, cr, null, 'rgba(70,66,60,.55)', Math.max(0.5, cr * 0.25)); }
+        PLANET.draw(c, 0, 0, 932 * px, 'moon');
       } else if (st.tgt === 'jupiter') {
-        const r = 22 * px; c.save(); c.beginPath(); c.ellipse(0, 0, r, r * 0.935, 0, 0, 7); c.clip(); c.fillStyle = '#e8d8b8'; c.fillRect(-r, -r, 2 * r, 2 * r);
-        [[-0.32, 0.12, '#b98a60'], [0.22, 0.14, '#a97650'], [-0.6, 0.06, '#c9a982'], [0.55, 0.06, '#c9a982']].forEach(([y, h, col]) => { c.fillStyle = col; c.fillRect(-r, y * r, 2 * r, h * r); });
-        c.fillStyle = '#c0604a'; c.beginPath(); c.ellipse(r * 0.3, r * 0.3, r * 0.12, r * 0.06, 0, 0, 7); c.fill(); c.restore();
+        PLANET.draw(c, 0, 0, 22 * px, 'jupiter');
         [[-138, 'Io'], [220, 'Europa'], [-351, 'Ganymede'], [618, 'Callisto']].forEach(([d]) => g.circle(c, d * px, (d > 0 ? 1 : -1) * 2 * px, Math.max(0.8, 0.6 * px), '#f2eee6'));
       } else if (st.tgt === 'saturn') {
-        const r = 9.2 * px; c.save(); c.scale(1, 0.38); g.circle(c, 0, 0, 21 * px, null, '#d8c79a', 6 * px); g.circle(c, 0, 0, 16.5 * px, null, '#b7a47a', 3 * px); c.restore();
-        g.circle(c, 0, 0, r, '#e3cf98');
-        c.save(); c.beginPath(); c.rect(-30 * px, -r * 0.05, 60 * px, r * 2); c.clip(); c.scale(1, 0.38); g.circle(c, 0, 0, 21 * px, null, '#d8c79a', 6 * px); c.restore();
+        PLANET.draw(c, 0, 0, 9.2 * px, 'saturn', { tilt: 0.38 });
         g.circle(c, 180 * px, 20 * px, Math.max(0.8, 0.5 * px), '#f0e6cc');
       } else if (st.tgt === 'albireo') {
         const sz = Math.max(1.2, 1.2 * px); g.circle(c, -17 * px, -5 * px, sz * 1.6, '#ffd27a'); g.circle(c, 17 * px, 5 * px, sz, '#9cc4ff');
